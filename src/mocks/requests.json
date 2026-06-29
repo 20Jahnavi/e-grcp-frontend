@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "department": "IT",
+    "amount": 50000,
+    "status": "Approved"
+  },
+  {
+    "id": 2,
+    "department": "HR",
+    "amount": 25000,
+    "status": "Pending"
+  },
+  {
+    "id": 3,
+    "department": "Finance",
+    "amount": 70000,
+    "status": "Rejected"
+  },
+  {
+    "id": 4,
+    "department": "Operations",
+    "amount": 45000,
+    "status": "Approved"
+  }
+]

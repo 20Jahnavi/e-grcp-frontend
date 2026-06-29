@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "policy": "ISO 27001",
+    "department": "IT",
+    "status": "Compliant"
+  },
+  {
+    "id": 2,
+    "policy": "GDPR",
+    "department": "Legal",
+    "status": "Pending"
+  },
+  {
+    "id": 3,
+    "policy": "Financial Audit",
+    "department": "Finance",
+    "status": "Violation"
+  },
+  {
+    "id": 4,
+    "policy": "Vendor Security",
+    "department": "Procurement",
+    "status": "Compliant"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Vendor Delay",
+    "department": "Procurement",
+    "level": "High",
+    "status": "Open"
+  },
+  {
+    "id": 2,
+    "name": "Compliance Failure",
+    "department": "Finance",
+    "level": "Medium",
+    "status": "Resolved"
+  },
+  {
+    "id": 3,
+    "name": "Data Breach",
+    "department": "IT",
+    "level": "High",
+    "status": "Open"
+  },
+  {
+    "id": 4,
+    "name": "Budget Overrun",
+    "department": "Operations",
+    "level": "Low",
+    "status": "Resolved"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Procurement Summary",
+    "department": "Procurement",
+    "generatedBy": "Admin",
+    "status": "Completed"
+  },
+  {
+    "id": 2,
+    "name": "Vendor Risk Report",
+    "department": "Risk",
+    "generatedBy": "Manager",
+    "status": "Pending"
+  },
+  {
+    "id": 3,
+    "name": "Compliance Audit",
+    "department": "Compliance",
+    "generatedBy": "Auditor",
+    "status": "Completed"
+  },
+  {
+    "id": 4,
+    "name": "Financial Analysis",
+    "department": "Finance",
+    "generatedBy": "Admin",
+    "status": "Pending"
+  }
+]
