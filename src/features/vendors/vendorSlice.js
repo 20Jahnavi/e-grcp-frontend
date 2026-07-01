@@ -10,14 +10,27 @@ export const fetchVendors =
   createAsyncThunk(
     "vendors/fetchVendors",
 
-    async () => {
+    async (_, { rejectWithValue }) => {
 
-      const response =
-        await apiClient.get(
-          "/products"
+      try {
+
+        const response =
+          await apiClient.get(
+            "/products"
+          );
+
+        return response.data.products;
+
+      }
+
+      catch (error) {
+
+        return rejectWithValue(
+          error.response?.data ||
+          "Failed to fetch vendors"
         );
 
-      return response.data.products;
+      }
     }
   );
 
@@ -26,15 +39,31 @@ export const addVendor =
   createAsyncThunk(
     "vendors/addVendor",
 
-    async (vendorData) => {
+    async (
+      vendorData,
+      { rejectWithValue }
+    ) => {
 
-      const response =
-        await apiClient.post(
-          "/products/add",
-          vendorData
+      try {
+
+        const response =
+          await apiClient.post(
+            "/products/add",
+            vendorData
+          );
+
+        return response.data;
+
+      }
+
+      catch (error) {
+
+        return rejectWithValue(
+          error.response?.data ||
+          "Failed to add vendor"
         );
 
-      return response.data;
+      }
     }
   );
 
@@ -43,18 +72,34 @@ export const updateVendor =
   createAsyncThunk(
     "vendors/updateVendor",
 
-    async ({
-      id,
-      vendorData,
-    }) => {
+    async (
+      {
+        id,
+        vendorData,
+      },
+      { rejectWithValue }
+    ) => {
 
-      const response =
-        await apiClient.put(
-          `/products/${id}`,
-          vendorData
+      try {
+
+        const response =
+          await apiClient.put(
+            `/products/${id}`,
+            vendorData
+          );
+
+        return response.data;
+
+      }
+
+      catch (error) {
+
+        return rejectWithValue(
+          error.response?.data ||
+          "Failed to update vendor"
         );
 
-      return response.data;
+      }
     }
   );
 
@@ -63,13 +108,29 @@ export const deleteVendor =
   createAsyncThunk(
     "vendors/deleteVendor",
 
-    async (id) => {
+    async (
+      id,
+      { rejectWithValue }
+    ) => {
 
-      await apiClient.delete(
-        `/products/${id}`
-      );
+      try {
 
-      return id;
+        await apiClient.delete(
+          `/products/${id}`
+        );
+
+        return id;
+
+      }
+
+      catch (error) {
+
+        return rejectWithValue(
+          error.response?.data ||
+          "Failed to delete vendor"
+        );
+
+      }
     }
   );
 
@@ -96,9 +157,11 @@ const vendorSlice =
           // FETCH
           .addCase(
             fetchVendors.pending,
+
             (state) => {
 
               state.loading = true;
+
               state.error = null;
 
             }
@@ -106,6 +169,7 @@ const vendorSlice =
 
           .addCase(
             fetchVendors.fulfilled,
+
             (state, action) => {
 
               state.loading = false;
@@ -113,6 +177,7 @@ const vendorSlice =
               state.vendors =
                 action.payload.map(
                   (vendor) => ({
+
                     ...vendor,
 
                     risk:
@@ -122,18 +187,22 @@ const vendorSlice =
                     status:
                       vendor.status ||
                       "Active",
+
                   })
                 );
+
             }
           )
 
           .addCase(
             fetchVendors.rejected,
-            (state) => {
+
+            (state, action) => {
 
               state.loading = false;
 
               state.error =
+                action.payload ||
                 "Failed to load vendors";
 
             }
@@ -142,9 +211,11 @@ const vendorSlice =
           // ADD
           .addCase(
             addVendor.fulfilled,
+
             (state, action) => {
 
               state.vendors.unshift({
+
                 ...action.payload,
 
                 risk:
@@ -154,6 +225,7 @@ const vendorSlice =
                 status:
                   action.payload.status ||
                   "Active",
+
               });
 
             }
@@ -162,6 +234,7 @@ const vendorSlice =
           // UPDATE
           .addCase(
             updateVendor.fulfilled,
+
             (state, action) => {
 
               state.vendors =
@@ -172,6 +245,7 @@ const vendorSlice =
                     action.payload.id
 
                       ? {
+
                           ...action.payload,
 
                           risk:
@@ -181,6 +255,7 @@ const vendorSlice =
                           status:
                             action.payload.status ||
                             "Active",
+
                         }
 
                       : vendor
@@ -192,6 +267,7 @@ const vendorSlice =
           // DELETE
           .addCase(
             deleteVendor.fulfilled,
+
             (state, action) => {
 
               state.vendors =

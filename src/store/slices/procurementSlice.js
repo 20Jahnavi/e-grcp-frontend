@@ -5,7 +5,7 @@ import {
 
 import apiClient from "../../api/apiClient";
 
-// FETCH PROCUREMENT REQUESTS
+// FETCH REQUESTS
 export const fetchRequests =
   createAsyncThunk(
     "procurement/fetchRequests",
@@ -27,80 +27,61 @@ const procurementSlice =
     name: "procurement",
 
     initialState: {
-
       requests: [],
       loading: false,
       error: null,
-
     },
 
     reducers: {},
 
-    extraReducers:
-      (builder) => {
+    extraReducers: (
+      builder
+    ) => {
 
-        builder
+      builder
 
-          // LOADING
-          .addCase(
-            fetchRequests.pending,
+        .addCase(
+          fetchRequests.pending,
 
-            (state) => {
+          (state) => {
 
-              state.loading = true;
+            state.loading = true;
 
-              state.error = null;
+            state.error = null;
+          }
+        )
 
-            }
-          )
+        .addCase(
+          fetchRequests.fulfilled,
 
-          // SUCCESS
-          .addCase(
-            fetchRequests.fulfilled,
+          (
+            state,
+            action
+          ) => {
 
-            (
-              state,
-              action
-            ) => {
+            state.loading =
+              false;
 
-              state.loading =
-                false;
+            state.requests =
+              action.payload;
+          }
+        )
 
-              state.requests =
-                action.payload.map(
-                  (item) => ({
-                    ...item,
+        .addCase(
+          fetchRequests.rejected,
 
-                    status:
-                      item.status ||
-                      "Pending",
+          (
+            state
+          ) => {
 
-                    priority:
-                      item.priority ||
-                      "Medium",
-                  })
-                );
+            state.loading =
+              false;
 
-            }
-          )
-
-          // ERROR
-          .addCase(
-            fetchRequests.rejected,
-
-            (
-              state
-            ) => {
-
-              state.loading =
-                false;
-
-              state.error =
-                "Failed to load procurement requests";
-
-            }
-          );
-      },
+            state.error =
+              "Failed to load requests";
+          }
+        );
+    },
   });
 
 export default
