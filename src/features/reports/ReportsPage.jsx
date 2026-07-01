@@ -76,7 +76,6 @@ function ReportsPage() {
 
         {/* Pie Chart */}
         <Grid
-          item
           xs={12}
           md={6}
         >
@@ -141,7 +140,6 @@ function ReportsPage() {
 
         {/* Bar Chart */}
         <Grid
-          item
           xs={12}
           md={6}
         >

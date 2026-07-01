@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 import { useNavigate }
@@ -29,13 +30,10 @@ function LoginPage() {
 
   const handleLogin = () => {
 
-    // Admin Login
+    // ADMIN LOGIN
     if (
-      email ===
-        "admin@gmail.com" &&
-
-      password ===
-        "admin@123"
+      email === "admin" &&
+      password === "admin123"
     ) {
 
       localStorage.setItem(
@@ -49,19 +47,17 @@ function LoginPage() {
       );
 
       toast.success(
-        "Admin Login Successful!"
+        "Login Successful"
       );
 
       navigate("/dashboard");
+
     }
 
-    // Employee Login
+    // USER LOGIN
     else if (
-      email ===
-        "jaanu@gmail.com" &&
-
-      password ===
-        "jaanu@123"
+      email === "user" &&
+      password === "user123"
     ) {
 
       localStorage.setItem(
@@ -71,23 +67,26 @@ function LoginPage() {
 
       localStorage.setItem(
         "role",
-        "employee"
+        "user"
       );
 
       toast.success(
-        "Employee Login Successful!"
+        "Login Successful"
       );
 
       navigate("/dashboard");
+
     }
 
-    // Invalid Login
+    // INVALID LOGIN
     else {
 
       toast.error(
-        "Invalid Email or Password"
+        "Invalid Credentials"
       );
+
     }
+
   };
 
   return (
@@ -119,7 +118,7 @@ function LoginPage() {
 
         <TextField
           fullWidth
-          label="Email"
+          label="Username"
           margin="normal"
           value={email}
           onChange={(e) =>

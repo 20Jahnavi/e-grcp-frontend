@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 import {
@@ -50,11 +51,9 @@ function VendorListPage() {
     (state) => state.vendors || {}
   );
 
-  // Search
   const [search, setSearch] =
     useState("");
 
-  // Pagination
   const [page, setPage] =
     useState(0);
 
@@ -63,17 +62,14 @@ function VendorListPage() {
     setRowsPerPage,
   ] = useState(5);
 
-  // Dialog
   const [
     openDialog,
     setOpenDialog,
   ] = useState(false);
 
-  // Edit Mode
   const [editId, setEditId] =
     useState(null);
 
-  // Form
   const [
     newVendor,
     setNewVendor,
@@ -84,14 +80,12 @@ function VendorListPage() {
     status: "Active",
   });
 
-  // Fetch Vendors
   useEffect(() => {
 
     dispatch(fetchVendors());
 
   }, [dispatch]);
 
-  // Search Filter
   const filteredVendors =
     vendors.filter((vendor) =>
       vendor.name
@@ -101,7 +95,6 @@ function VendorListPage() {
         )
     );
 
-  // Statistics
   const activeVendors =
     vendors.filter(
       (vendor) =>
@@ -115,7 +108,6 @@ function VendorListPage() {
         vendor.risk === "High"
     ).length;
 
-  // Pagination
   const handleChangePage = (
     event,
     newPage
@@ -136,9 +128,9 @@ function VendorListPage() {
       );
 
       setPage(0);
+
     };
 
-  // Open Dialog
   const handleOpenDialog =
     () => {
 
@@ -155,7 +147,6 @@ function VendorListPage() {
 
     };
 
-  // Close Dialog
   const handleCloseDialog =
     () => {
 
@@ -163,7 +154,6 @@ function VendorListPage() {
 
     };
 
-  // Edit Vendor
   const handleEdit = (
     vendor
   ) => {
@@ -183,7 +173,6 @@ function VendorListPage() {
 
   };
 
-  // Save Vendor
   const handleSaveVendor =
     async () => {
 
@@ -197,11 +186,11 @@ function VendorListPage() {
         );
 
         return;
+
       }
 
       try {
 
-        // Edit
         if (editId !== null) {
 
           await dispatch(
@@ -218,7 +207,6 @@ function VendorListPage() {
 
         }
 
-        // Add
         else {
 
           await dispatch(
@@ -230,6 +218,7 @@ function VendorListPage() {
           toast.success(
             "Vendor Added"
           );
+
         }
 
         dispatch(
@@ -238,7 +227,9 @@ function VendorListPage() {
 
         setOpenDialog(false);
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         toast.error(
           "Operation Failed"
@@ -248,7 +239,6 @@ function VendorListPage() {
 
     };
 
-  // Delete Vendor
   const handleDelete =
     async (id) => {
 
@@ -266,7 +256,9 @@ function VendorListPage() {
           fetchVendors()
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         toast.error(
           "Delete Failed"
@@ -276,7 +268,6 @@ function VendorListPage() {
 
     };
 
-  // Loading
   if (loading) {
 
     return (
@@ -284,9 +275,9 @@ function VendorListPage() {
         Loading Vendors...
       </Typography>
     );
+
   }
 
-  // Error
   if (error) {
 
     return (
@@ -297,13 +288,13 @@ function VendorListPage() {
         {error}
       </Typography>
     );
+
   }
 
   return (
 
     <Box sx={{ p: 3 }}>
 
-      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -329,14 +320,14 @@ function VendorListPage() {
 
       </Box>
 
-      {/* Summary Cards */}
+      {/* FIXED GRID */}
       <Grid
         container
         spacing={3}
         sx={{ mb: 3 }}
       >
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
 
           <Card>
 
@@ -356,7 +347,7 @@ function VendorListPage() {
 
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
 
           <Card>
 
@@ -376,7 +367,7 @@ function VendorListPage() {
 
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
 
           <Card>
 
@@ -398,7 +389,6 @@ function VendorListPage() {
 
       </Grid>
 
-      {/* Search */}
       <TextField
         label="Search Vendor"
         variant="outlined"
@@ -412,7 +402,6 @@ function VendorListPage() {
         }
       />
 
-      {/* Table */}
       <TableContainer
         component={Paper}
       >
@@ -545,13 +534,13 @@ function VendorListPage() {
                   </TableCell>
 
                 </TableRow>
+
               ))}
 
           </TableBody>
 
         </Table>
 
-        {/* Pagination */}
         <TablePagination
           component="div"
           count={
@@ -576,13 +565,11 @@ function VendorListPage() {
 
       </TableContainer>
 
-      {/* Dialog */}
       <Dialog
         open={openDialog}
         onClose={
           handleCloseDialog
         }
-        disableRestoreFocus
       >
 
         <DialogTitle>
@@ -711,7 +698,9 @@ function VendorListPage() {
       </Dialog>
 
     </Box>
+
   );
+
 }
 
 export default VendorListPage;

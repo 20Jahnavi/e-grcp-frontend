@@ -9,28 +9,21 @@ import {
   Button,
 } from "@mui/material";
 
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import { toast }
-from "react-toastify";
+import { toast } from "react-toastify";
 
 function ProfilePage() {
 
-  const [
-    profile,
-    setProfile,
-  ] = useState({
-    name: "Admin User",
-    email:
-      "admin@egrcp.com",
-    role: "Administrator",
-  });
+  const [profile, setProfile] =
+    useState({
+      name: "Admin User",
+      email: "admin@egrcp.com",
+      role: "Administrator",
+    });
 
-  const handleChange = (
-    e
-  ) => {
+  // Handle Input Change
+  const handleChange = (e) => {
 
     setProfile({
       ...profile,
@@ -40,6 +33,7 @@ function ProfilePage() {
 
   };
 
+  // Save Profile
   const handleSave = () => {
 
     toast.success(
@@ -52,28 +46,41 @@ function ProfilePage() {
 
     <Box sx={{ p: 3 }}>
 
+      {/* Title */}
       <Typography
         variant="h4"
-        sx={{ mb: 3 }}
+        sx={{
+          mb: 3,
+          fontWeight: "bold",
+        }}
       >
         Profile
       </Typography>
 
+      {/* Main Grid */}
       <Grid
         container
-        justifyContent="center"
+        sx={{
+          justifyContent: "center",
+        }}
       >
 
+        {/* Profile Card */}
         <Grid
-          item
           xs={12}
           md={6}
         >
 
-          <Card>
+          <Card
+            elevation={4}
+            sx={{
+              borderRadius: 3,
+            }}
+          >
 
             <CardContent>
 
+              {/* Avatar Section */}
               <Box
                 sx={{
                   display: "flex",
@@ -81,7 +88,7 @@ function ProfilePage() {
                     "column",
                   alignItems:
                     "center",
-                  mb: 3,
+                  mb: 4,
                 }}
               >
 
@@ -91,17 +98,34 @@ function ProfilePage() {
                     height: 100,
                     mb: 2,
                     fontSize: 40,
+                    bgcolor:
+                      "primary.main",
                   }}
                 >
-                  A
+                  {profile.name
+                    ?.charAt(0)}
                 </Avatar>
 
-                <Typography variant="h5">
-                  Admin User
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight:
+                      "bold",
+                  }}
+                >
+                  {profile.name}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  {profile.role}
                 </Typography>
 
               </Box>
 
+              {/* Name */}
               <TextField
                 fullWidth
                 label="Name"
@@ -113,6 +137,7 @@ function ProfilePage() {
                 sx={{ mb: 2 }}
               />
 
+              {/* Email */}
               <TextField
                 fullWidth
                 label="Email"
@@ -124,6 +149,7 @@ function ProfilePage() {
                 sx={{ mb: 2 }}
               />
 
+              {/* Role */}
               <TextField
                 fullWidth
                 label="Role"
@@ -135,9 +161,11 @@ function ProfilePage() {
                 sx={{ mb: 3 }}
               />
 
+              {/* Save Button */}
               <Button
                 fullWidth
                 variant="contained"
+                size="large"
                 onClick={
                   handleSave
                 }
@@ -156,6 +184,7 @@ function ProfilePage() {
     </Box>
 
   );
+
 }
 
 export default ProfilePage;

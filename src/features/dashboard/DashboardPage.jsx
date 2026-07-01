@@ -1,3 +1,4 @@
+
 import {
   Box,
   Typography,
@@ -87,7 +88,7 @@ function DashboardPage() {
         sx={{ mb: 4 }}
       >
 
-        <Grid item xs={12} md={3}>
+        <Grid xs={12} md={3}>
 
           <Card>
 
@@ -107,7 +108,7 @@ function DashboardPage() {
 
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid xs={12} md={3}>
 
           <Card>
 
@@ -127,7 +128,7 @@ function DashboardPage() {
 
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid xs={12} md={3}>
 
           <Card>
 
@@ -147,7 +148,7 @@ function DashboardPage() {
 
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid xs={12} md={3}>
 
           <Card>
 
@@ -173,7 +174,7 @@ function DashboardPage() {
       <Grid container spacing={3}>
 
         {/* Pie Chart */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
 
           <Card>
 
@@ -234,7 +235,7 @@ function DashboardPage() {
         </Grid>
 
         {/* Bar Chart */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
 
           <Card>
 

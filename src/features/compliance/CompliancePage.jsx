@@ -47,7 +47,6 @@ function CompliancePage() {
         {complianceData.map((item) => (
 
           <Grid
-            item
             xs={12}
             md={4}
             key={item.id}

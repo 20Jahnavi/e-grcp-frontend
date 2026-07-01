@@ -47,7 +47,6 @@ function RiskPage() {
         {risks.map((risk) => (
 
           <Grid
-            item
             xs={12}
             md={4}
             key={risk.id}
