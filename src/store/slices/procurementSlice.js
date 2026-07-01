@@ -1,12 +1,11 @@
-
 import {
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 
-import axios from "axios";
+import apiClient from "../../api/apiClient";
 
-// FETCH REQUESTS
+// FETCH PROCUREMENT REQUESTS
 export const fetchRequests =
   createAsyncThunk(
     "procurement/fetchRequests",
@@ -14,11 +13,11 @@ export const fetchRequests =
     async () => {
 
       const response =
-        await axios.get(
-          "/api/procurement"
+        await apiClient.get(
+          "/products"
         );
 
-      return response.data;
+      return response.data.products;
     }
   );
 
@@ -28,65 +27,80 @@ const procurementSlice =
     name: "procurement",
 
     initialState: {
+
       requests: [],
       loading: false,
       error: null,
+
     },
 
     reducers: {},
 
-    extraReducers: (
-      builder
-    ) => {
+    extraReducers:
+      (builder) => {
 
-      builder
+        builder
 
-        // LOADING
-        .addCase(
-          fetchRequests.pending,
+          // LOADING
+          .addCase(
+            fetchRequests.pending,
 
-          (state) => {
+            (state) => {
 
-            state.loading = true;
+              state.loading = true;
 
-            state.error = null;
-          }
-        )
+              state.error = null;
 
-        // SUCCESS
-        .addCase(
-          fetchRequests.fulfilled,
+            }
+          )
 
-          (
-            state,
-            action
-          ) => {
+          // SUCCESS
+          .addCase(
+            fetchRequests.fulfilled,
 
-            state.loading =
-              false;
+            (
+              state,
+              action
+            ) => {
 
-            state.requests =
-              action.payload;
-          }
-        )
+              state.loading =
+                false;
 
-        // ERROR
-        .addCase(
-          fetchRequests.rejected,
+              state.requests =
+                action.payload.map(
+                  (item) => ({
+                    ...item,
 
-          (
-            state,
-            action
-          ) => {
+                    status:
+                      item.status ||
+                      "Pending",
 
-            state.loading =
-              false;
+                    priority:
+                      item.priority ||
+                      "Medium",
+                  })
+                );
 
-            state.error =
-              "Failed to load requests";
-          }
-        );
-    },
+            }
+          )
+
+          // ERROR
+          .addCase(
+            fetchRequests.rejected,
+
+            (
+              state
+            ) => {
+
+              state.loading =
+                false;
+
+              state.error =
+                "Failed to load procurement requests";
+
+            }
+          );
+      },
   });
 
 export default

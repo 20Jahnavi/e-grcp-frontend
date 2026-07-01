@@ -1,4 +1,3 @@
-
 import {
   createSlice,
   createAsyncThunk,
@@ -76,12 +75,15 @@ export const deleteVendor =
 
 const vendorSlice =
   createSlice({
+
     name: "vendors",
 
     initialState: {
+
       vendors: [],
       loading: false,
       error: null,
+
     },
 
     reducers: {},
@@ -97,6 +99,8 @@ const vendorSlice =
             (state) => {
 
               state.loading = true;
+              state.error = null;
+
             }
           )
 
@@ -107,7 +111,19 @@ const vendorSlice =
               state.loading = false;
 
               state.vendors =
-                action.payload;
+                action.payload.map(
+                  (vendor) => ({
+                    ...vendor,
+
+                    risk:
+                      vendor.risk ||
+                      "Low",
+
+                    status:
+                      vendor.status ||
+                      "Active",
+                  })
+                );
             }
           )
 
@@ -119,6 +135,7 @@ const vendorSlice =
 
               state.error =
                 "Failed to load vendors";
+
             }
           )
 
@@ -127,9 +144,18 @@ const vendorSlice =
             addVendor.fulfilled,
             (state, action) => {
 
-              state.vendors.push(
-                action.payload
-              );
+              state.vendors.unshift({
+                ...action.payload,
+
+                risk:
+                  action.payload.risk ||
+                  "Low",
+
+                status:
+                  action.payload.status ||
+                  "Active",
+              });
+
             }
           )
 
@@ -141,11 +167,25 @@ const vendorSlice =
               state.vendors =
                 state.vendors.map(
                   (vendor) =>
+
                     vendor.id ===
                     action.payload.id
-                      ? action.payload
+
+                      ? {
+                          ...action.payload,
+
+                          risk:
+                            action.payload.risk ||
+                            "Low",
+
+                          status:
+                            action.payload.status ||
+                            "Active",
+                        }
+
                       : vendor
                 );
+
             }
           )
 
@@ -160,6 +200,7 @@ const vendorSlice =
                     vendor.id !==
                     action.payload
                 );
+
             }
           );
       },
