@@ -14,7 +14,7 @@ export const fetchVendors =
 
       const response =
         await axios.get(
-          "http://localhost:5000/api/vendors"
+          "/api/vendors"
         );
 
       return response.data;
@@ -30,7 +30,7 @@ export const addVendor =
 
       const response =
         await axios.post(
-          "http://localhost:5000/api/vendors",
+          "/api/vendors",
           vendorData
         );
 
@@ -50,7 +50,7 @@ export const updateVendor =
 
       const response =
         await axios.put(
-          `http://localhost:5000/api/vendors/${id}`,
+          `/api/vendors/${id}`,
           vendorData
         );
 
@@ -66,7 +66,7 @@ export const deleteVendor =
     async (id) => {
 
       await axios.delete(
-        `http://localhost:5000/api/vendors/${id}`
+        `/api/vendors/${id}`
       );
 
       return id;
