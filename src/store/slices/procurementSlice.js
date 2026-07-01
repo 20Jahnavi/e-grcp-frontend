@@ -10,14 +10,26 @@ export const fetchRequests =
   createAsyncThunk(
     "procurement/fetchRequests",
 
-    async () => {
+    async (_, { rejectWithValue }) => {
 
-      const response =
-        await apiClient.get(
-          "/products"
+      try {
+
+        const response =
+          await apiClient.get(
+            "/products"
+          );
+
+        return response.data.products;
+
+      }
+
+      catch (error) {
+
+        return rejectWithValue(
+          "Failed to load requests"
         );
 
-      return response.data.products;
+      }
     }
   );
 
@@ -27,9 +39,11 @@ const procurementSlice =
     name: "procurement",
 
     initialState: {
+
       requests: [],
       loading: false,
       error: null,
+
     },
 
     reducers: {},
@@ -48,37 +62,33 @@ const procurementSlice =
             state.loading = true;
 
             state.error = null;
+
           }
         )
 
         .addCase(
           fetchRequests.fulfilled,
 
-          (
-            state,
-            action
-          ) => {
+          (state, action) => {
 
-            state.loading =
-              false;
+            state.loading = false;
 
             state.requests =
               action.payload;
+
           }
         )
 
         .addCase(
           fetchRequests.rejected,
 
-          (
-            state
-          ) => {
+          (state, action) => {
 
-            state.loading =
-              false;
+            state.loading = false;
 
             state.error =
-              "Failed to load requests";
+              action.payload;
+
           }
         );
     },

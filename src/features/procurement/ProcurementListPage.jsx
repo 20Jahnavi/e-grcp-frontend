@@ -49,11 +49,9 @@ function ProcurementListPage() {
       state.procurement || {}
   );
 
-  // Search
   const [search, setSearch] =
     useState("");
 
-  // Pagination
   const [page, setPage] =
     useState(0);
 
@@ -62,17 +60,14 @@ function ProcurementListPage() {
     setRowsPerPage,
   ] = useState(5);
 
-  // Dialog
   const [
     openDialog,
     setOpenDialog,
   ] = useState(false);
 
-  // Edit Mode
   const [editId, setEditId] =
     useState(null);
 
-  // Form
   const [
     newRequest,
     setNewRequest,
@@ -82,27 +77,36 @@ function ProcurementListPage() {
     status: "Pending",
   });
 
-  // Local Requests State
   const [
     allRequests,
     setAllRequests,
   ] = useState([]);
 
-  // Fetch Requests
+  // FETCH DATA
   useEffect(() => {
 
     dispatch(fetchRequests());
 
   }, [dispatch]);
 
-  // Load Requests
+  // SAFE DATA LOAD
   useEffect(() => {
 
-    setAllRequests(requests);
+    if (Array.isArray(requests)) {
+
+      setAllRequests(requests);
+
+    }
+
+    else {
+
+      setAllRequests([]);
+
+    }
 
   }, [requests]);
 
-  // Search Filter
+  // SEARCH
   const filteredRequests =
     allRequests.filter(
       (request) =>
@@ -113,7 +117,7 @@ function ProcurementListPage() {
           )
     );
 
-  // Pagination
+  // PAGINATION
   const handleChangePage = (
     event,
     newPage
@@ -137,7 +141,7 @@ function ProcurementListPage() {
 
     };
 
-  // Approve
+  // APPROVE
   const handleApprove = (
     id
   ) => {
@@ -162,7 +166,7 @@ function ProcurementListPage() {
 
   };
 
-  // Reject
+  // REJECT
   const handleReject = (
     id
   ) => {
@@ -187,7 +191,7 @@ function ProcurementListPage() {
 
   };
 
-  // Delete
+  // DELETE
   const handleDelete = (
     id
   ) => {
@@ -206,7 +210,7 @@ function ProcurementListPage() {
 
   };
 
-  // Open Add Dialog
+  // OPEN DIALOG
   const handleOpenDialog =
     () => {
 
@@ -222,7 +226,7 @@ function ProcurementListPage() {
 
     };
 
-  // Edit Dialog
+  // EDIT
   const handleEdit = (
     request
   ) => {
@@ -244,7 +248,7 @@ function ProcurementListPage() {
 
   };
 
-  // Close Dialog
+  // CLOSE
   const handleCloseDialog =
     () => {
 
@@ -252,7 +256,7 @@ function ProcurementListPage() {
 
     };
 
-  // Save Request
+  // SAVE
   const handleSaveRequest =
     () => {
 
@@ -269,7 +273,7 @@ function ProcurementListPage() {
 
       }
 
-      // Edit
+      // UPDATE
       if (editId !== null) {
 
         const updated =
@@ -291,10 +295,11 @@ function ProcurementListPage() {
 
       }
 
-      // Add
+      // ADD
       else {
 
         const request = {
+
           id: Date.now(),
 
           department:
@@ -305,15 +310,16 @@ function ProcurementListPage() {
 
           status:
             newRequest.status,
+
         };
 
         setAllRequests([
-          ...allRequests,
           request,
+          ...allRequests,
         ]);
 
         toast.success(
-          "New Request Added"
+          "Request Added"
         );
 
       }
@@ -322,7 +328,7 @@ function ProcurementListPage() {
 
     };
 
-  // Loading
+  // LOADING
   if (loading) {
 
     return (
@@ -333,7 +339,7 @@ function ProcurementListPage() {
 
   }
 
-  // Error
+  // ERROR
   if (error) {
 
     return (
@@ -341,7 +347,9 @@ function ProcurementListPage() {
         variant="h5"
         color="error"
       >
-        {error}
+        {typeof error === "string"
+          ? error
+          : "Something went wrong"}
       </Typography>
     );
 
@@ -351,7 +359,7 @@ function ProcurementListPage() {
 
     <Box sx={{ p: 3 }}>
 
-      {/* Header */}
+      {/* HEADER */}
       <Box
         sx={{
           display: "flex",
@@ -377,7 +385,7 @@ function ProcurementListPage() {
 
       </Box>
 
-      {/* Search */}
+      {/* SEARCH */}
       <TextField
         label="Search Department"
         variant="outlined"
@@ -391,7 +399,7 @@ function ProcurementListPage() {
         }
       />
 
-      {/* Table */}
+      {/* TABLE */}
       <TableContainer
         component={Paper}
       >
@@ -572,7 +580,7 @@ function ProcurementListPage() {
 
       </TableContainer>
 
-      {/* Dialog */}
+      {/* DIALOG */}
       <Dialog
         open={openDialog}
         onClose={

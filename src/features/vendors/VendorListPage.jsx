@@ -44,8 +44,8 @@ function VendorListPage() {
 
   const {
     vendors = [],
-    loading,
-    error,
+    loading = false,
+    error = null,
   } = useSelector(
     (state) => state.vendors || {}
   );
@@ -85,23 +85,29 @@ function VendorListPage() {
 
   }, [dispatch]);
 
+  // SAFE ARRAY CHECK
+  const safeVendors =
+    Array.isArray(vendors)
+      ? vendors
+      : [];
+
   const filteredVendors =
-    vendors.filter((vendor) =>
-      vendor.title
+    safeVendors.filter((vendor) =>
+      vendor?.title
         ?.toLowerCase()
         .includes(search.toLowerCase())
     );
 
   const activeVendors =
-    vendors.filter(
+    safeVendors.filter(
       (vendor) =>
-        vendor.status === "Active"
+        vendor?.status === "Active"
     ).length;
 
   const highRiskVendors =
-    vendors.filter(
+    safeVendors.filter(
       (vendor) =>
-        vendor.risk === "High"
+        vendor?.risk === "High"
     ).length;
 
   const handleChangePage = (
@@ -157,9 +163,9 @@ function VendorListPage() {
     setEditId(vendor.id);
 
     setNewVendor({
-      title: vendor.title,
+      title: vendor.title || "",
       category:
-        vendor.category,
+        vendor.category || "",
       risk:
         vendor.risk || "Low",
       status:
@@ -276,19 +282,6 @@ function VendorListPage() {
 
   }
 
-  if (error) {
-
-    return (
-      <Typography
-        variant="h5"
-        color="error"
-      >
-        {error}
-      </Typography>
-    );
-
-  }
-
   return (
 
     <Box sx={{ p: 3 }}>
@@ -318,13 +311,28 @@ function VendorListPage() {
 
       </Box>
 
+      {/* ERROR MESSAGE */}
+
+      {error && (
+
+        <Typography
+          color="error"
+          sx={{ mb: 2 }}
+        >
+          {typeof error === "string"
+            ? error
+            : "API Error"}
+        </Typography>
+
+      )}
+
       <Grid
         container
         spacing={3}
         sx={{ mb: 3 }}
       >
 
-        <Grid xs={12} md={4}>
+        <Grid item xs={12} md={4}>
 
           <Card>
 
@@ -335,7 +343,7 @@ function VendorListPage() {
               </Typography>
 
               <Typography variant="h4">
-                {vendors.length}
+                {safeVendors.length}
               </Typography>
 
             </CardContent>
@@ -344,7 +352,7 @@ function VendorListPage() {
 
         </Grid>
 
-        <Grid xs={12} md={4}>
+        <Grid item xs={12} md={4}>
 
           <Card>
 
@@ -364,7 +372,7 @@ function VendorListPage() {
 
         </Grid>
 
-        <Grid xs={12} md={4}>
+        <Grid item xs={12} md={4}>
 
           <Card>
 
@@ -435,93 +443,109 @@ function VendorListPage() {
 
           <TableBody>
 
-            {filteredVendors
+            {filteredVendors.length >
+            0 ? (
 
-              .slice(
-                page *
-                  rowsPerPage,
-                page *
-                  rowsPerPage +
-                  rowsPerPage
-              )
+              filteredVendors
 
-              .map((vendor) => (
+                .slice(
+                  page *
+                    rowsPerPage,
+                  page *
+                    rowsPerPage +
+                    rowsPerPage
+                )
 
-                <TableRow
-                  key={vendor.id}
+                .map((vendor) => (
+
+                  <TableRow
+                    key={vendor.id}
+                  >
+
+                    <TableCell>
+                      {vendor.title}
+                    </TableCell>
+
+                    <TableCell>
+                      {
+                        vendor.category
+                      }
+                    </TableCell>
+
+                    <TableCell>
+
+                      <Chip
+                        label={
+                          vendor.risk ||
+                          "Low"
+                        }
+                        color="success"
+                      />
+
+                    </TableCell>
+
+                    <TableCell>
+
+                      <Chip
+                        label={
+                          vendor.status ||
+                          "Active"
+                        }
+                        color="primary"
+                      />
+
+                    </TableCell>
+
+                    <TableCell>
+
+                      <Button
+                        variant="contained"
+                        size="small"
+                        sx={{
+                          mr: 1,
+                        }}
+                        onClick={() =>
+                          handleEdit(
+                            vendor
+                          )
+                        }
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() =>
+                          handleDelete(
+                            vendor.id
+                          )
+                        }
+                      >
+                        Delete
+                      </Button>
+
+                    </TableCell>
+
+                  </TableRow>
+
+                ))
+
+            ) : (
+
+              <TableRow>
+
+                <TableCell
+                  colSpan={5}
+                  align="center"
                 >
+                  No Vendors Found
+                </TableCell>
 
-                  <TableCell>
-                    {vendor.title}
-                  </TableCell>
+              </TableRow>
 
-                  <TableCell>
-                    {
-                      vendor.category
-                    }
-                  </TableCell>
-
-                  <TableCell>
-
-                    <Chip
-                      label={
-                        vendor.risk ||
-                        "Low"
-                      }
-
-                      color="success"
-                    />
-
-                  </TableCell>
-
-                  <TableCell>
-
-                    <Chip
-                      label={
-                        vendor.status ||
-                        "Active"
-                      }
-
-                      color="success"
-                    />
-
-                  </TableCell>
-
-                  <TableCell>
-
-                    <Button
-                      variant="contained"
-                      size="small"
-                      sx={{
-                        mr: 1,
-                      }}
-                      onClick={() =>
-                        handleEdit(
-                          vendor
-                        )
-                      }
-                    >
-                      Edit
-                    </Button>
-
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      size="small"
-                      onClick={() =>
-                        handleDelete(
-                          vendor.id
-                        )
-                      }
-                    >
-                      Delete
-                    </Button>
-
-                  </TableCell>
-
-                </TableRow>
-
-              ))}
+            )}
 
           </TableBody>
 
@@ -550,6 +574,140 @@ function VendorListPage() {
         />
 
       </TableContainer>
+
+      {/* DIALOG */}
+
+      <Dialog
+        open={openDialog}
+        onClose={
+          handleCloseDialog
+        }
+      >
+
+        <DialogTitle>
+
+          {editId !== null
+            ? "Edit Vendor"
+            : "Add Vendor"}
+
+        </DialogTitle>
+
+        <DialogContent>
+
+          <TextField
+            fullWidth
+            label="Vendor Name"
+            margin="normal"
+            value={
+              newVendor.title
+            }
+            onChange={(e) =>
+              setNewVendor({
+                ...newVendor,
+                title:
+                  e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            fullWidth
+            label="Category"
+            margin="normal"
+            value={
+              newVendor.category
+            }
+            onChange={(e) =>
+              setNewVendor({
+                ...newVendor,
+                category:
+                  e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            select
+            fullWidth
+            label="Risk"
+            margin="normal"
+            value={
+              newVendor.risk
+            }
+            onChange={(e) =>
+              setNewVendor({
+                ...newVendor,
+                risk:
+                  e.target.value,
+              })
+            }
+          >
+
+            <MenuItem value="Low">
+              Low
+            </MenuItem>
+
+            <MenuItem value="Medium">
+              Medium
+            </MenuItem>
+
+            <MenuItem value="High">
+              High
+            </MenuItem>
+
+          </TextField>
+
+          <TextField
+            select
+            fullWidth
+            label="Status"
+            margin="normal"
+            value={
+              newVendor.status
+            }
+            onChange={(e) =>
+              setNewVendor({
+                ...newVendor,
+                status:
+                  e.target.value,
+              })
+            }
+          >
+
+            <MenuItem value="Active">
+              Active
+            </MenuItem>
+
+            <MenuItem value="Inactive">
+              Inactive
+            </MenuItem>
+
+          </TextField>
+
+        </DialogContent>
+
+        <DialogActions>
+
+          <Button
+            onClick={
+              handleCloseDialog
+            }
+          >
+            Cancel
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={
+              handleSaveVendor
+            }
+          >
+            Save
+          </Button>
+
+        </DialogActions>
+
+      </Dialog>
 
     </Box>
 

@@ -1,3 +1,4 @@
+
 import {
   createSlice,
   createAsyncThunk,
@@ -26,7 +27,7 @@ export const fetchVendors =
       catch (error) {
 
         return rejectWithValue(
-          error.response?.data ||
+          error.message ||
           "Failed to fetch vendors"
         );
 
@@ -59,7 +60,7 @@ export const addVendor =
       catch (error) {
 
         return rejectWithValue(
-          error.response?.data ||
+          error.message ||
           "Failed to add vendor"
         );
 
@@ -95,7 +96,7 @@ export const updateVendor =
       catch (error) {
 
         return rejectWithValue(
-          error.response?.data ||
+          error.message ||
           "Failed to update vendor"
         );
 
@@ -126,7 +127,7 @@ export const deleteVendor =
       catch (error) {
 
         return rejectWithValue(
-          error.response?.data ||
+          error.message ||
           "Failed to delete vendor"
         );
 
@@ -202,8 +203,7 @@ const vendorSlice =
               state.loading = false;
 
               state.error =
-                action.payload ||
-                "Failed to load vendors";
+                action.payload;
 
             }
           )
