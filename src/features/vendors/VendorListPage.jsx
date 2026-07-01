@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import {
@@ -74,7 +73,7 @@ function VendorListPage() {
     newVendor,
     setNewVendor,
   ] = useState({
-    name: "",
+    title: "",
     category: "",
     risk: "Low",
     status: "Active",
@@ -88,18 +87,15 @@ function VendorListPage() {
 
   const filteredVendors =
     vendors.filter((vendor) =>
-      vendor.name
+      vendor.title
         ?.toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
+        .includes(search.toLowerCase())
     );
 
   const activeVendors =
     vendors.filter(
       (vendor) =>
-        vendor.status ===
-        "Active"
+        vendor.status === "Active"
     ).length;
 
   const highRiskVendors =
@@ -137,7 +133,7 @@ function VendorListPage() {
       setEditId(null);
 
       setNewVendor({
-        name: "",
+        title: "",
         category: "",
         risk: "Low",
         status: "Active",
@@ -158,15 +154,17 @@ function VendorListPage() {
     vendor
   ) => {
 
-    setEditId(vendor._id);
+    setEditId(vendor.id);
 
     setNewVendor({
-      name: vendor.name,
+      title: vendor.title,
       category:
         vendor.category,
-      risk: vendor.risk,
+      risk:
+        vendor.risk || "Low",
       status:
-        vendor.status,
+        vendor.status ||
+        "Active",
     });
 
     setOpenDialog(true);
@@ -177,7 +175,7 @@ function VendorListPage() {
     async () => {
 
       if (
-        !newVendor.name ||
+        !newVendor.title ||
         !newVendor.category
       ) {
 
@@ -248,7 +246,7 @@ function VendorListPage() {
           deleteVendor(id)
         );
 
-        toast.error(
+        toast.success(
           "Vendor Deleted"
         );
 
@@ -320,14 +318,13 @@ function VendorListPage() {
 
       </Box>
 
-      {/* FIXED GRID */}
       <Grid
         container
         spacing={3}
         sx={{ mb: 3 }}
       >
 
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid xs={12} md={4}>
 
           <Card>
 
@@ -347,7 +344,7 @@ function VendorListPage() {
 
         </Grid>
 
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid xs={12} md={4}>
 
           <Card>
 
@@ -367,7 +364,7 @@ function VendorListPage() {
 
         </Grid>
 
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid xs={12} md={4}>
 
           <Card>
 
@@ -451,11 +448,11 @@ function VendorListPage() {
               .map((vendor) => (
 
                 <TableRow
-                  key={vendor._id}
+                  key={vendor.id}
                 >
 
                   <TableCell>
-                    {vendor.name}
+                    {vendor.title}
                   </TableCell>
 
                   <TableCell>
@@ -468,18 +465,11 @@ function VendorListPage() {
 
                     <Chip
                       label={
-                        vendor.risk
+                        vendor.risk ||
+                        "Low"
                       }
 
-                      color={
-                        vendor.risk ===
-                        "Low"
-                          ? "success"
-                          : vendor.risk ===
-                            "Medium"
-                          ? "warning"
-                          : "error"
-                      }
+                      color="success"
                     />
 
                   </TableCell>
@@ -488,15 +478,11 @@ function VendorListPage() {
 
                     <Chip
                       label={
-                        vendor.status
+                        vendor.status ||
+                        "Active"
                       }
 
-                      color={
-                        vendor.status ===
-                        "Active"
-                          ? "success"
-                          : "default"
-                      }
+                      color="success"
                     />
 
                   </TableCell>
@@ -524,7 +510,7 @@ function VendorListPage() {
                       size="small"
                       onClick={() =>
                         handleDelete(
-                          vendor._id
+                          vendor.id
                         )
                       }
                     >
@@ -564,138 +550,6 @@ function VendorListPage() {
         />
 
       </TableContainer>
-
-      <Dialog
-        open={openDialog}
-        onClose={
-          handleCloseDialog
-        }
-      >
-
-        <DialogTitle>
-
-          {editId !== null
-            ? "Edit Vendor"
-            : "Add Vendor"}
-
-        </DialogTitle>
-
-        <DialogContent>
-
-          <TextField
-            fullWidth
-            margin="dense"
-            label="Vendor Name"
-            value={
-              newVendor.name
-            }
-            onChange={(e) =>
-              setNewVendor({
-                ...newVendor,
-                name:
-                  e.target.value,
-              })
-            }
-          />
-
-          <TextField
-            fullWidth
-            margin="dense"
-            label="Category"
-            value={
-              newVendor.category
-            }
-            onChange={(e) =>
-              setNewVendor({
-                ...newVendor,
-                category:
-                  e.target.value,
-              })
-            }
-          />
-
-          <TextField
-            fullWidth
-            select
-            margin="dense"
-            label="Risk"
-            value={
-              newVendor.risk
-            }
-            onChange={(e) =>
-              setNewVendor({
-                ...newVendor,
-                risk:
-                  e.target.value,
-              })
-            }
-          >
-
-            <MenuItem value="Low">
-              Low
-            </MenuItem>
-
-            <MenuItem value="Medium">
-              Medium
-            </MenuItem>
-
-            <MenuItem value="High">
-              High
-            </MenuItem>
-
-          </TextField>
-
-          <TextField
-            fullWidth
-            select
-            margin="dense"
-            label="Status"
-            value={
-              newVendor.status
-            }
-            onChange={(e) =>
-              setNewVendor({
-                ...newVendor,
-                status:
-                  e.target.value,
-              })
-            }
-          >
-
-            <MenuItem value="Active">
-              Active
-            </MenuItem>
-
-            <MenuItem value="Inactive">
-              Inactive
-            </MenuItem>
-
-          </TextField>
-
-        </DialogContent>
-
-        <DialogActions>
-
-          <Button
-            onClick={
-              handleCloseDialog
-            }
-          >
-            Cancel
-          </Button>
-
-          <Button
-            variant="contained"
-            onClick={
-              handleSaveVendor
-            }
-          >
-            Save
-          </Button>
-
-        </DialogActions>
-
-      </Dialog>
 
     </Box>
 

@@ -1,11 +1,12 @@
+
 import {
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 
-import axios from "axios";
+import apiClient from "../../api/apiClient";
 
-// GET Vendors
+// FETCH Vendors
 export const fetchVendors =
   createAsyncThunk(
     "vendors/fetchVendors",
@@ -13,11 +14,11 @@ export const fetchVendors =
     async () => {
 
       const response =
-        await axios.get(
-          "/api/vendors"
+        await apiClient.get(
+          "/products"
         );
 
-      return response.data;
+      return response.data.products;
     }
   );
 
@@ -29,8 +30,8 @@ export const addVendor =
     async (vendorData) => {
 
       const response =
-        await axios.post(
-          "/api/vendors",
+        await apiClient.post(
+          "/products/add",
           vendorData
         );
 
@@ -49,8 +50,8 @@ export const updateVendor =
     }) => {
 
       const response =
-        await axios.put(
-          `/api/vendors/${id}`,
+        await apiClient.put(
+          `/products/${id}`,
           vendorData
         );
 
@@ -65,8 +66,8 @@ export const deleteVendor =
 
     async (id) => {
 
-      await axios.delete(
-        `/api/vendors/${id}`
+      await apiClient.delete(
+        `/products/${id}`
       );
 
       return id;
@@ -140,8 +141,8 @@ const vendorSlice =
               state.vendors =
                 state.vendors.map(
                   (vendor) =>
-                    vendor._id ===
-                    action.payload._id
+                    vendor.id ===
+                    action.payload.id
                       ? action.payload
                       : vendor
                 );
@@ -156,7 +157,7 @@ const vendorSlice =
               state.vendors =
                 state.vendors.filter(
                   (vendor) =>
-                    vendor._id !==
+                    vendor.id !==
                     action.payload
                 );
             }
