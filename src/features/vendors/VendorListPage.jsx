@@ -32,7 +32,6 @@ import {
 import { toast } from "react-toastify";
 
 import {
-  fetchVendors,
   addVendor,
   updateVendor,
   deleteVendor,
@@ -78,12 +77,6 @@ function VendorListPage() {
     risk: "Low",
     status: "Active",
   });
-
-  useEffect(() => {
-
-    dispatch(fetchVendors());
-
-  }, [dispatch]);
 
   // SAFE ARRAY CHECK
   const safeVendors =
@@ -225,9 +218,7 @@ function VendorListPage() {
 
         }
 
-        dispatch(
-          fetchVendors()
-        );
+      
 
         setOpenDialog(false);
 
@@ -256,9 +247,6 @@ function VendorListPage() {
           "Vendor Deleted"
         );
 
-        dispatch(
-          fetchVendors()
-        );
 
       }
 
