@@ -31,9 +31,10 @@ import {
 } from "react-redux";
 
 import { toast } from "react-toastify";
-
 import {
-  fetchRequests,
+  addRequest,
+  updateRequest,
+  deleteRequest,
 } from "../../store/slices/procurementSlice";
 
 function ProcurementListPage() {
@@ -82,12 +83,7 @@ function ProcurementListPage() {
     setAllRequests,
   ] = useState([]);
 
-  // FETCH DATA
-  useEffect(() => {
-
-    dispatch(fetchRequests());
-
-  }, [dispatch]);
+  
 
   // SAFE DATA LOAD
   useEffect(() => {

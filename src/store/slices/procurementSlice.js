@@ -1,98 +1,112 @@
+
 import {
   createSlice,
-  createAsyncThunk,
 } from "@reduxjs/toolkit";
 
-import apiClient from "../../api/apiClient";
+const initialState = {
 
-// FETCH REQUESTS
-export const fetchRequests =
-  createAsyncThunk(
-    "procurement/fetchRequests",
+  requests: [
 
-    async (_, { rejectWithValue }) => {
+    {
+      id: 1,
+      department: "IT",
+      amount: 50000,
+      status: "Pending",
+    },
 
-      try {
+    {
+      id: 2,
+      department: "HR",
+      amount: 25000,
+      status: "Approved",
+    },
 
-        const response =
-          await apiClient.get(
-            "/products"
-          );
+    {
+      id: 3,
+      department: "Finance",
+      amount: 75000,
+      status: "Rejected",
+    },
 
-        return response.data.products;
+  ],
 
-      }
+  loading: false,
 
-      catch (error) {
+  error: null,
 
-        return rejectWithValue(
-          "Failed to load requests"
-        );
-
-      }
-    }
-  );
+};
 
 const procurementSlice =
   createSlice({
 
     name: "procurement",
 
-    initialState: {
+    initialState,
 
-      requests: [],
-      loading: false,
-      error: null,
+    reducers: {
+
+      addRequest: (
+        state,
+        action
+      ) => {
+
+        state.requests.unshift({
+
+          id: Date.now(),
+
+          ...action.payload,
+
+        });
+
+      },
+
+      updateRequest: (
+        state,
+        action
+      ) => {
+
+        state.requests =
+          state.requests.map(
+            (request) =>
+
+              request.id ===
+              action.payload.id
+
+                ? action.payload
+
+                : request
+          );
+
+      },
+
+      deleteRequest: (
+        state,
+        action
+      ) => {
+
+        state.requests =
+          state.requests.filter(
+            (request) =>
+
+              request.id !==
+              action.payload
+          );
+
+      },
 
     },
 
-    reducers: {},
-
-    extraReducers: (
-      builder
-    ) => {
-
-      builder
-
-        .addCase(
-          fetchRequests.pending,
-
-          (state) => {
-
-            state.loading = true;
-
-            state.error = null;
-
-          }
-        )
-
-        .addCase(
-          fetchRequests.fulfilled,
-
-          (state, action) => {
-
-            state.loading = false;
-
-            state.requests =
-              action.payload;
-
-          }
-        )
-
-        .addCase(
-          fetchRequests.rejected,
-
-          (state, action) => {
-
-            state.loading = false;
-
-            state.error =
-              action.payload;
-
-          }
-        );
-    },
   });
+
+export const {
+
+  addRequest,
+
+  updateRequest,
+
+  deleteRequest,
+
+} = procurementSlice.actions;
 
 export default
 procurementSlice.reducer;
